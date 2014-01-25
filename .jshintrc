@@ -23,7 +23,11 @@
         "expect",
         "minispade",
         "async",
-        "invokeAsync"
+        "invokeAsync",
+        "requireModule",
+        "throws",
+        "notEqual",
+        "notStrictEqual"
     ],
 
     "node" : false,

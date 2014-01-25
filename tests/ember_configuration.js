@@ -89,7 +89,7 @@ var define, requireModule, require, requirejs;
   }
 
   EmberDev.distros = {
-    spade:   'ember-resolver-spade.js',
-    build:   'ember-resolver.js'
+    spade:   'container-resolver-namespaces-spade.js',
+    build:   'container-resolver-namespaces.js'
   };
 })();
