@@ -62,3 +62,15 @@ use standard syntax (without the namespace specified):
 For this to work properly the container will need to maintain a list of namespaces that it is aware of, and a resolver that goes along with it.
 When a lookup happens in application code, the container will first determine the namespace it goes with, then lookup or instantiate the resolver
 for that namespace (looking in `/resolver.js` first then falling back to the default resolver).
+
+## TODO
+
+* Make container aware of namespaces?
+
+  This may not be what we want actually. I am thinking that the container will likely need to simply manage multiple resolver instances hopefully
+  in the container itself as `resolver:some-namespace`.
+
+* Add a few helper methods to the resolver to allow looking up namespaces.
+* Add a few test helpers that can be used for creating the container 
+* Copy `container` packages from `emberjs/ember.js` repo, and `ember-resolver` from `stefanpenner/ember-jj-abrams-resolver` repo.
+* Merge the test suites and get tests running.
