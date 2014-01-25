@@ -4,5 +4,6 @@ rvm:
 node_js:
   - "0.10"
 install:
+  - sudo apt-get update && sudo apt-get install git
   - "bundle install --deployment"
 script: bundle exec rake test[all]
