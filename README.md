@@ -65,11 +65,10 @@ for that namespace (looking in `/resolver.js` first then falling back to the def
 
 ## TODO
 
-* Make container aware of namespaces?
-
-  This may not be what we want actually. I am thinking that the container will likely need to simply manage multiple resolver instances hopefully
-  in the container itself as `resolver:some-namespace`.
-
+* Make container aware of namespaces.
+* Possibly create a container proxy that implements the current container API, but automatically prefixes any
+  lookups so that any lookups that do not contain `some-namespace@` before the type + name section are automatically assumed to be the
+  current namespace.
 * Add a few helper methods to the resolver to allow looking up namespaces.
 * Add a few test helpers that can be used for creating the container 
 * Copy `container` packages from `emberjs/ember.js` repo, and `ember-resolver` from `stefanpenner/ember-jj-abrams-resolver` repo.
