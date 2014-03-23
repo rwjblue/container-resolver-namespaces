@@ -54,8 +54,8 @@ use standard syntax (without the namespace specified):
 ### A Few Conventions
 
 * The namepaced code should be able to specify its own custom resolver (so that its internal structure is not dictated by each applications structure),
-  and the location for that will be `/resolver.js` (under the root of the namespace).
-* The namespaced code should be able to supply initializers (via `/initializer.js`) that is ran on application boot.
+  and the location for that will be in a module named `<namespace name>/resolver` (or via global lookup as `NamespaceGlobal.Resolver`).
+* The namespaced code should be able to supply initializers (via a module named `<namespace name>/initializers`) that would be ran on application boot.
 
 ## How?
 
@@ -63,13 +63,29 @@ For this to work properly the container will need to maintain a list of namespac
 When a lookup happens in application code, the container will first determine the namespace it goes with, then lookup or instantiate the resolver
 for that namespace (looking in `/resolver.js` first then falling back to the default resolver).
 
-## TODO
+* The internally looked up items will be in an `ember` namespace. This would include `route:basic`, `controller:array`, `controller:object` etc.
+* All container lookups (and internal functions) would be modified to require a namespace parameter.
+* A new `NamespacedContainer` object will be created that will be initialized with a default namespace, but will have the same method signature as the current container.
+* Each namespace will get a `NamespacedContainer` object instead of the raw container. This allows lookups from within the namespace to use that namespaces code/modules by default.
+* The namespace "lookup path" can be modified within each object created.
 
-* Make container aware of namespaces.
-* Possibly create a container proxy that implements the current container API, but automatically prefixes any
-  lookups so that any lookups that do not contain `some-namespace@` before the type + name section are automatically assumed to be the
-  current namespace.
-* Add a few helper methods to the resolver to allow looking up namespaces.
-* Add a few test helpers that can be used for creating the container 
-* Copy `container` packages from `emberjs/ember.js` repo, and `ember-resolver` from `stefanpenner/ember-jj-abrams-resolver` repo.
-* Merge the test suites and get tests running.
+  An example syntax of this might look like:
+
+  ```javascript
+  export default Ember.Route.extend({
+    lookupPath: ['app', 'ember']  // this would be the default value and would not be required
+  });
+  ```
+
+  Which would amount to look in the `app` namespace, then look in the `ember` namespace.
+
+  The default lookup path can be modified, and items would be looked up in the specified order:
+
+  ```javascript
+  export default Ember.Route.extend({
+    lookupPath: ['app', 'google-maps', 'ember']
+  });
+  ```
+* Any object that specifies a different `lookupPath` would get a different instance of `NamespacedContainer` for that set.
+* Template namespaces load path can be specified via either namespaced lookups (i.e. `{{g-maps@g-marker lat=89 long=99}}`) or by importing that namespace (i.e. `{{import 'g-maps'}}`).
+* Importing a namespace in a template would only affect that particular template (not the entire application's templates).
